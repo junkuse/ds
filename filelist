@@ -31,3 +31,6 @@ linearprobingjay.cpp
 sadhashjay.cpp		
 seperatechainingjay.cpp		
 splay	
+bstdelete
+bstlevelorder
+bstmirror
