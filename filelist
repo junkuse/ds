@@ -10,8 +10,7 @@ Queue.cpp
 SelectionSort.cpp		
 Sparsematrix.cpp		
 Stack .cpp		
-avl.cpp		
-avl2.txt		
+avl.cpp			
 bst.cpp		
 bstclass.txt		
 bstinordsucc.c		
