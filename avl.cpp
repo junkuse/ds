@@ -95,11 +95,9 @@ int getBalance(Node *N)
 {
  if (N == NULL)
   return 0;
- return height(N->left) - height(N->right);
+ return height(N->left) -
+  height(N->right);
 }
-
-
-
 
 Node* insert(Node* node, int key)
 {
@@ -156,6 +154,129 @@ Node* insert(Node* node, int key)
 
 
 
+Node * minValueNode(Node* node)
+{
+ Node* current = node;
+
+
+ while (current->left != NULL)
+  current = current->left;
+
+ return current;
+}
+
+
+
+
+
+Node* deleteNode(Node* root, int key)
+{
+
+
+ if (root == NULL)
+  return root;
+
+
+
+
+ if ( key < root->key )
+  root->left = deleteNode(root->left, key);
+
+
+
+
+ else if( key > root->key )
+  root->right = deleteNode(root->right, key);
+
+
+
+ else
+ {
+
+  if( (root->left == NULL) ||
+   (root->right == NULL) )
+  {
+   Node *temp = root->left ?
+      root->left :
+      root->right;
+
+
+   if (temp == NULL)
+   {
+    temp = root;
+    root = NULL;
+   }
+   else
+   *root = *temp;
+
+   free(temp);
+  }
+  else
+  {
+
+
+   Node* temp = minValueNode(root->right);
+
+
+
+   root->key = temp->key;
+
+
+   root->right = deleteNode(root->right,
+         temp->key);
+  }
+ }
+
+
+
+ if (root == NULL)
+ return root;
+
+
+ root->height = 1 + max(height(root->left),
+      height(root->right));
+
+
+
+
+ int balance = getBalance(root);
+
+
+
+
+
+ if (balance > 1 &&
+  getBalance(root->left) >= 0)
+  return rightRotate(root);
+
+
+ if (balance > 1 &&
+  getBalance(root->left) < 0)
+ {
+  root->left = leftRotate(root->left);
+  return rightRotate(root);
+ }
+
+
+ if (balance < -1 &&
+  getBalance(root->right) <= 0)
+  return leftRotate(root);
+
+
+ if (balance < -1 &&
+  getBalance(root->right) > 0)
+ {
+  root->right = rightRotate(root->right);
+  return leftRotate(root);
+ }
+
+ return root;
+}
+
+
+
+
+
 void preOrder(Node *root)
 {
  if(root != NULL)
@@ -169,19 +290,28 @@ void preOrder(Node *root)
 
 int main()
 {
- Node *root = NULL;
+Node *root = NULL;
 
 
 
+ root = insert(root, 9);
+ root = insert(root, 5);
  root = insert(root, 10);
- root = insert(root, 20);
- root = insert(root, 30);
- root = insert(root, 40);
- root = insert(root, 50);
- root = insert(root, 25);
-# 190 "avl.cpp"
+ root = insert(root, 0);
+ root = insert(root, 6);
+ root = insert(root, 11);
+ root = insert(root, -1);
+ root = insert(root, 1);
+ root = insert(root, 2);
+
  cout << "Preorder traversal of the "
    "constructed AVL tree is \n";
+ preOrder(root);
+
+ root = deleteNode(root, 10);
+
+ cout << "\nPreorder traversal after"
+  << " deletion of 10 \n";
  preOrder(root);
 
  return 0;
