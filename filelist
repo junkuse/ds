@@ -9,7 +9,8 @@ MergeSort.cpp
 Queue.cpp		
 SelectionSort.cpp		
 Sparsematrix.cpp		
-Stack .cpp		
+Stack .cpp
+avlnoclass.cpp
 avl.cpp			
 bst.cpp		
 bstclass.txt		
