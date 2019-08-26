@@ -11,7 +11,8 @@ SelectionSort.cpp
 Sparsematrix.cpp		
 Stack .cpp
 avlnoclass.cpp
-avl.cpp			
+avl
+avlclass
 bst.cpp		
 bstclass.txt		
 bstinordsucc.c		
