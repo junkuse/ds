@@ -1,249 +1,348 @@
-#include <iostream>
-#include <cstdio>
-#include <cstdlib>
+#include<iostream>
+
 using namespace std;
- 
-struct splay
+
+class splay
 {
-    int key;
-    splay* lchild;
-    splay* rchild;
+ private:
+ int val;
+ splay *left;
+ splay *right;
+ 
+ public:
+ void create(splay **hptr,int num);
+ void insert(splay *hptr,int num);
+ splay *leftr(splay *ptr);
+ splay *rightr(splay *ptr);
+ splay *leftrightr(splay *ptr);
+ splay *rightleftr(splay *ptr);
+ splay *rightright(splay *ptr);
+ splay *leftleft(splay *ptr);
+ void rotation(splay **hptr,int num);
+ void find1(splay *hptr,int num);
+ void find2(splay *hptr);
+ void find3(splay *hptr);
+ void tran(splay *hptr);
+ void rotation1(splay **hptr,int num);
 };
  
-class SplayTree
+ splay *pptr=NULL,*gpptr=NULL,*ggpptr=NULL;
+
+  
+void splay::create(splay **hptr,int num)
 {
-    public:
-        SplayTree()
-        {
-        }
+ splay *temp=new splay;
  
-        // RR(Y rotates to the right)
-        splay* RR_Rotate(splay* k2)
-        {
-            splay* k1 = k2->lchild;
-            k2->lchild = k1->rchild;
-            k1->rchild = k2;
-            return k1;
-        }
+ temp->val=num;
+ temp->left=NULL;
+ temp->right=NULL;
+
+ *hptr=temp;
+}
+
+void splay::find1(splay *hptr,int num)
+{
+  splay *temp=hptr;
+  if(num==hptr->val)
+  {
+    pptr=NULL;
+    gpptr=NULL;
+    ggpptr=NULL;
+  } 
+  
+ else
+ {
+   while(hptr!=NULL)
+  {
+    pptr=hptr;
+    
+    if(hptr->val>num)
+    hptr=hptr->left;
+  
+    else
+    hptr=hptr->right;
+     
+    if(hptr->val==num)
+     break;
+  }
+ cout<<"pptr "<<pptr->val;
+}
+
+}
+
+
+void splay::find2(splay *hptr)
+{
+  if(pptr->val==hptr->val)
+   {cout<<"\n Hello 22"; 
+     gpptr=NULL;
+     ggpptr=NULL;
+   }
  
-        // LL(Y rotates to the left)
-        splay* LL_Rotate(splay* k2)
+  else
+    { 
+     while(hptr!=NULL)
+     {
+       gpptr=hptr;
+       
+       if(pptr->val<hptr->val)
+        hptr=hptr->left;
+      
+       else 
+        hptr=hptr->right;
+
+        if(pptr->val==hptr->val)
+          break;
+     }
+    cout<<"\n gpptr  "<<gpptr->val;
+    } 
+
+}
+
+void splay::find3(splay *hptr)
+{
+   if(gpptr!=NULL)
+    {
+      if(hptr->val==gpptr->val)
+        ggpptr=NULL;
+     
+      else 
         {
-            splay* k1 = k2->rchild;
-            k2->rchild = k1->lchild;
-            k1->lchild = k2;
-            return k1;
-        }
+          while(hptr!=NULL)
+          {
+             ggpptr=hptr;
+            
+             if(gpptr->val<hptr->val)
+               hptr=hptr->left;
+              
+             else
+               hptr=hptr->right;
+
+            if(gpptr->val==hptr->val)
+                 break;
+          }
+    cout<<" ggpptr "<<ggpptr->val;
+         }
+    }
+
+    else if(gpptr==NULL)
+     ggpptr=NULL;
+}
+        
+
+               
+void splay::insert(splay *hptr,int  num)
+{
+  splay *temp,*temp1,*temp3;
+  temp=hptr;
+  temp1=new splay;
+
+  while(temp!=NULL)
+  {
+   temp3=temp;  
+    
+    if(temp->val>num)
+     temp=temp->left;
+     
+    else if(temp->val<num)
+     temp=temp->right;
+  }
+
+  if(temp3->val>num)
+{
+   cout<<"\n Inserting to left\n";
+   temp3->left=temp1;
+}
+  else
+{
+    cout<<"\n Inserting to Right\n";
+  temp3->right=temp1;
+}
+   temp1->val=num;
+   temp1->left=NULL;
+   temp1->right=NULL;
+}
+
+
+void splay::rotation1(splay **hptr,int num)
+{
+   if(pptr==NULL);
+   
+   else if(pptr->val==(*hptr)->val&&gpptr==NULL)
+     {    cout<<"\n Hello\n";
+         if(num>pptr->val)
+          *hptr=leftr(pptr);
  
-        // An implementation of top-down splay tree
-        splay* Splay(int key, splay* root)
-        {
-            if (!root)
-                return NULL;
-            splay header;
-            /* header.rchild points to L tree;
-            header.lchild points to R Tree */
-            header.lchild = header.rchild = NULL;
-            splay* LeftTreeMax = &header;
-            splay* RightTreeMin = &header;
-            while (1)
-            {
-                if (key < root->key)
-                {
-                    if (!root->lchild)
-                        break;
-                    if (key < root->lchild->key)
-                    {
-                        root = RR_Rotate(root);
-                        // only zig-zig mode need to rotate once,
-                        if (!root->lchild)
-                            break;
-                    }
-                    /* Link to R Tree */
-                    RightTreeMin->lchild = root;
-                    RightTreeMin = RightTreeMin->lchild;
-                    root = root->lchild;
-                    RightTreeMin->lchild = NULL;
-                }
-                else if (key > root->key)
-                {
-                    if (!root->rchild)
-                        break;
-                    if (key > root->rchild->key)
-                    {
-                        root = LL_Rotate(root);
-                        // only zag-zag mode need to rotate once,
-                        if (!root->rchild)
-                            break;
-                    }
-                    /* Link to L Tree */
-                    LeftTreeMax->rchild = root;
-                    LeftTreeMax = LeftTreeMax->rchild;
-                    root = root->rchild;
-                    LeftTreeMax->rchild = NULL;
-                }
-                else
-                    break;
-            }
-            /* assemble L Tree, Middle Tree and R tree */
-            LeftTreeMax->rchild = root->lchild;
-            RightTreeMin->lchild = root->rchild;
-            root->lchild = header.rchild;
-            root->rchild = header.lchild;
-            return root;
-        }
+          else
+          *hptr=rightr(pptr);
+     }
  
-        splay* New_Node(int key)
-        {
-            splay* p_node = new splay;
-            if (!p_node)
-            {
-                fprintf(stderr, "Out of memory!\n");
-                exit(1);
-            }
-            p_node->key = key;
-            p_node->lchild = p_node->rchild = NULL;
-            return p_node;
-        }
+   else if(gpptr==*hptr)
+     {
+        if(pptr->val<num&&pptr->val>gpptr->val)
+           *hptr=leftleft(gpptr);
+        else if(pptr->val<num&&pptr->val<gpptr->val)
+           *hptr=leftrightr(gpptr);
+        else if(pptr->val>num&&pptr->val<gpptr->val)
+           *hptr=rightright(gpptr);
+        else if(pptr->val>num&&gpptr->val<pptr->val)
+           *hptr=rightleftr(gpptr);
+     }
  
-        splay* Insert(int key, splay* root)
-        {
-            static splay* p_node = NULL;
-            if (!p_node)
-                p_node = New_Node(key);
-            else
-                p_node->key = key;
-            if (!root)
-            {
-                root = p_node;
-                p_node = NULL;
-                return root;
-            }
-            root = Splay(key, root);
-            /* This is BST that, all keys <= root->key is in root->lchild, all keys >
-            root->key is in root->rchild. */
-            if (key < root->key)
-            {
-                p_node->lchild = root->lchild;
-                p_node->rchild = root;
-                root->lchild = NULL;
-                root = p_node;
-            }
-            else if (key > root->key)
-            {
-                p_node->rchild = root->rchild;
-                p_node->lchild = root;
-                root->rchild = NULL;
-                root = p_node;
-            }
-            else
-                return root;
-            p_node = NULL;
-            return root;
-        }
+   else
+     {
+        if(pptr->val<num&&pptr->val>gpptr->val)
+          {
+             splay *head=*hptr;
+             if(ggpptr->left==gpptr)
+             ggpptr->left=leftleft(gpptr);
  
-        splay* Delete(int key, splay* root)
-        {
-            splay* temp;
-            if (!root)
-                return NULL;
-            root = Splay(key, root);
-            if (key != root->key)
-                return root;
-            else
-            {
-                if (!root->lchild)
-                {
-                    temp = root;
-                    root = root->rchild;
-                }
-                else
-                {
-                    temp = root;
-                    /*Note: Since key == root->key,
-                    so after Splay(key, root->lchild),
-                    the tree we get will have no right child tree.*/
-                    root = Splay(key, root->lchild);
-                    root->rchild = temp->rchild;
-                }
-                free(temp);
-                return root;
-            }
-        }
+             else
+             ggpptr->right=leftleft(gpptr);
+        
+                find1(head,num); 
+                find2(head); 
+                find3(head);
+               rotation1(hptr,num);
+          } 
+
+         else if(pptr->val<num&&gpptr->val>pptr->val)
+          {
+             splay *head=*hptr;
+             if(ggpptr->left==gpptr)
+             ggpptr->left=leftrightr(gpptr);
  
-        splay* Search(int key, splay* root)
-        {
-            return Splay(key, root);
-        }
+             else
+             ggpptr->right=leftrightr(gpptr);
+        
+                find1(head,num); 
+                find2(head); 
+                find3(head);
+               rotation1(hptr,num);
+          }
+
+         else if(pptr->val>num&&gpptr->val>pptr->val)
+          {
+             splay *head=*hptr;
+             if(ggpptr->left==gpptr)
+             ggpptr->left=rightright(gpptr);
  
-        void InOrder(splay* root)
-        {
-            if (root)
-            {
-                InOrder(root->lchild);
-                cout<< "key: " <<root->key;
-                if(root->lchild)
-                    cout<< " | left child: "<< root->lchild->key;
-                if(root->rchild)
-                    cout << " | right child: " << root->rchild->key;
-                cout<< "\n";
-                InOrder(root->rchild);
-            }
-        }
-};
+             else
+             ggpptr->right=rightright(gpptr);
+        
+                find1(head,num); 
+                find2(head); 
+                find3(head);
+               rotation1(hptr,num);
+          }
+
+         else if(pptr->val>num&&gpptr->val<pptr->val)
+          {
+             splay *head=*hptr;
+             if(ggpptr->left==gpptr)
+             ggpptr->left=rightleftr(gpptr);
+ 
+             else
+             ggpptr->right=rightleftr(gpptr);
+        
+                find1(head,num); 
+                find2(head); 
+                find3(head);
+               rotation1(hptr,num);
+         }
+           
+       }
+
+   cout<<"\n Errors\n";
+}  
+               
+splay *splay::leftr(splay *ptr)
+{
+  splay *jptr=ptr;
+  splay *kptr=jptr->right;
+  jptr->right=kptr->left;
+  kptr->left=jptr;
+  return kptr;
+}
+
+splay *splay::rightr(splay *ptr)
+{
+ splay *jptr=ptr;
+ splay *kptr=jptr->left;
+ jptr->left=kptr->right;
+ kptr->right=jptr;
+ 
+ return kptr;
+}
+
+splay *splay::leftrightr(splay *ptr)
+{
+ splay *jptr=ptr;
+ splay *kptr=jptr->left;
+ jptr->left=leftr(kptr);
+ return(rightr(jptr));
+}
+
+splay *splay::rightleftr(splay *ptr)
+{
+  splay *jptr=ptr;
+  splay *kptr=jptr->right;
+  jptr->right=rightr(kptr);
+  return(leftr(jptr));
+}
+
+splay *splay::leftleft(splay *ptr)
+{
+  splay *jptr=ptr;
+  splay *kptr;
+  kptr=leftr(jptr);
+  return leftr(kptr);
+}
+
+splay *splay::rightright(splay *ptr)
+{
+  splay *jptr=ptr;
+  splay *kptr;
+  kptr=rightr(jptr);
+  return rightr(kptr);
+}
+
+void splay::tran(splay *hptr)
+{
+ if(hptr!=NULL)
+{
+ cout<<hptr->val<<"  ";
+ tran(hptr->left);
+ tran(hptr->right);
+}
+}
+
  
 int main()
 {
-    SplayTree st;
-    int vector[10] = {9,8,7,6,5,4,3,2,1,0};
-    splay *root;
-    root = NULL;
-    const int length = 10;
-    int i;
-    for(i = 0; i < length; i++)
-        root = st.Insert(vector[i], root);
-    cout<<"\nInOrder: \n";
-    st.InOrder(root);
-    int input, choice;
-    while(1)
-    {
-        cout<<"\nSplay Tree Operations\n";
-        cout<<"1. Insert "<<endl;
-        cout<<"2. Delete"<<endl;
-        cout<<"3. Search"<<endl;
-        cout<<"4. Exit"<<endl;
-        cout<<"Enter your choice: ";
-        cin>>choice;
-        switch(choice)
-        {
-        case 1:
-            cout<<"Enter value to be inserted: ";
-            cin>>input;
-            root = st.Insert(input, root);
-            cout<<"\nAfter Insert: "<<input<<endl;
-            st.InOrder(root);
-            break;
-        case 2:
-            cout<<"Enter value to be deleted: ";
-            cin>>input;
-            root = st.Delete(input, root);
-            cout<<"\nAfter Delete: "<<input<<endl;
-            st.InOrder(root);
-            break;
-        case 3:
-            cout<<"Enter value to be searched: ";
-            cin>>input;
-            root = st.Search(input, root);
-            cout<<"\nAfter Search "<<input<<endl;
-            st.InOrder(root);
-            break;
+  splay *head=NULL,a;
+  int n,flag;
+  cout<<"\n Enter the val\n";
+  cin>>n;
+  a.create(&head,n);
+  
+  while(1)
+  {
+    cout<<"\n Enter the valu -- ";
+    cin>>n;
+    a.insert(head,n);
+    a.find1(head,n); 
+    a.find2(head); 
+    a.find3(head);
+    a.rotation1(&head,n); 
+     cout<<"\n";
+    a.tran(head);
+    cout<<"\n Enter the Flag  ---- ";
+    cin>>flag;
  
-        case 4:
-            exit(1);
-        default:
-            cout<<"\nInvalid type! \n";
-        }
-    }
-    cout<<"\n";
+    if(flag==0)
+    break;
+  }
+   
     return 0;
-}
+}  
