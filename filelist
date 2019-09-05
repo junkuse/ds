@@ -36,3 +36,4 @@ bstdelete
 bstlevelorder
 bstmirror
 btree
+btreefull
