@@ -1,0 +1,132 @@
+91
+
+
+31
+I am using Linux Mint 17.1 Rebecca for about 2 days and accidentally typed my password into the terminal which is now displayed in the history list of commands I have previously typed.
+
+I want to clear the terminal history completely. I have tried using the following commands in the terminal which I thought would clear the history forever but they do not:
+
+history -c
+reset
+tput reset
+The above commands "will" clear the history from the terminal but when I exit and bring up a new one all my previous history is still there and can all be listed again using the - history command and also by pressing the UP arrow on my keyboard. I do not want this to happen until I have totally cleared my history, then I want to continue using it.
+
+How can I clear my terminal history completely - forever and start fresh?
+
+Please Note: I do not want to exit the terminal without saving history just clear it forever in this one instance.
+
+bash command-history
+share
+improve this question
+asked May 13 '15 at 23:53
+
+Shambhala
+55811 gold badge55 silver badges77 bronze badges
+1
+sed -i "s/$your_pass//g" ~/.bash_history... – jasonwryan May 13 '15 at 23:55
+3
+@jasonwryan That alone wouldn't solve the problem since the sed command would end up in the shell history. – Gilles May 14 '15 at 0:11
+1
+I tried using the code from @jasonwryan but I got: sed: -e expression #1, char 0: no previous regular expression which I think I know why and that lead me to come up with this from a search and some messing around: cat /dev/null > ~/.bash_history && history -c && exit – Shambhala May 14 '15 at 0:15
+1
+@Gilles: you are right: there is supposed to be a space in front of the command... – jasonwryan May 14 '15 at 0:28
+add a comment
+6 Answers
+activeoldestvotes
+
+142
+
+reset or tput reset only does things to the terminal. The history is entirely managed by the shell, which remains unaffected.
+
+history -c clears your history in the current shell. That's enough (but overkill) if you've just typed your password and haven't exited that shell or saved its history explicitly.
+
+When you exit bash, the history is saved to the history file, which by default is .bash_history in your home directory. More precisely, the history created during the current session is appended to the file; entries that are already present are unaffected. To overwrite the history file with the current shell's history, run history -w.
+
+Instead of removing all your history entries, you can open .bash_history in an editor and remove the lines you don't want to keep. You can also do that inside bash, less conveniently, by using history to display all the entries, then history -d to delete the entries you don't want, and finally history -w to save.
+
+Note that even after you've edited the history file, it's possible that your password is still present somewhere on the disk from an earlier version of the file. It can't be retrieved through the filesystem anymore, but it might still be possible (but probably not easy) to find it by accessing the disk directly. If you use this password elsewhere and your disk gets stolen (or someone gets access to the disk), this could be a problem.
+
+share
+improve this answer
+answered May 14 '15 at 0:10
+
+Gilles
+574k139139 gold badges11841184 silver badges16951695 bronze badges
+1
+I like your answer and will accept as you told me quite a few things I did not know that are very useful. I will also change my password! – Shambhala May 14 '15 at 0:21
+First type history to check the content of the history log and the line numbers you want to delete, supposed you want to delete the line number 1000 in the history log, then history -d 1000 – Claude COULOMBE Mar 6 at 20:37
+If I modify the .bash_history file directly, the history command still shows commands as they were before modification, until I log out/log in. – Benitok Mar 8 at 15:44 
+add a comment
+
+35
+
+I have tried history -c but the history comes back once we exit and reopens.This helped me.
+
+cat /dev/null > ~/.bash_history && history -c && exit
+This clears the history saved in the history file as well as the history in the current session (so that it's not saved to file when bash exits). It then exits the shell. The next shell session will have no history.
+
+share
+improve this answer
+edited May 17 '17 at 7:33
+
+Kusalananda♦
+163k1919 gold badges321321 silver badges508508 bronze badges
+answered May 17 '17 at 7:10
+
+athul
+46166 silver badges88 bronze badges
+add a comment
+
+18
+
+Instead of removing all your history entries, type these commands in your terminal:
+
+history -c (for delete history)
+history -w (save history)
+share
+improve this answer
+edited May 19 '16 at 13:43
+
+Jeff Schaller♦
+49.7k1111 gold badges7373 silver badges165165 bronze badges
+answered May 19 '16 at 13:12
+
+user171143
+18911 silver badge22 bronze badges
+This won't be enough with zsh if inc_append_history or share_history option is set. – saga May 17 '17 at 8:33
+add a comment
+
+5
+
+Because there is a security issue here, you should consider securely deleting the history file.
+
+$ shred -u ~/.bash_history && touch ~/.bash_history
+share
+improve this answer
+answered Jun 3 '17 at 16:48
+
+C0D3R3D
+5111 silver badge11 bronze badge
+add a comment
+
+3
+
+As a neophyte faced with the same problem I resorted to the rather the rather brutal expedient of deleting and recreating the history file:-
+
+rm .bash_history
+touch .bash_history
+It worked for me without giving rise to any unpleasant side effects that I'm aware of.
+
+share
+improve this answer
+answered Jul 27 '16 at 21:35
+
+Hairy Joe
+3111 bronze badge
+add a comment
+
+3
+
+Type: history -c; rm ~/.bash_history
+
+history -c clears your current session's history, rm ~/.bash_history clears your long term history, so history -c; rm ~/.bash_history clears both.
