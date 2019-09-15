@@ -38,4 +38,5 @@ bstmirror
 btree
 btreefull
 splaystr
+splaycf
 avlstr
