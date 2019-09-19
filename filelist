@@ -1,45 +1,45 @@
-BubbleSort.cpp	Add files via upload	last month
-Chaining.cpp	Add files via upload	last month
-CircularLinkedList.cpp	Add files via upload	last month
-DoublyLinkedList.cpp	Add files via upload	last month
-HeapSort .cpp	Add files via upload	last month
-InsertionSort.cpp	Add files via upload	last month
-LinkedList.cpp	Add files via upload	last month
-MergeSort.cpp	Add files via upload	last month
-Queue.cpp	Add files via upload	last month
-SelectionSort.cpp	Add files via upload	last month
-Sparsematrix.cpp	Add files via upload	last month
-Stack .cpp	Add files via upload	last month
-avl	Update avl	15 days ago
-avlclass	Create avlclass	25 days ago
-avlnoclass.cpp	Update avlnoclass.cpp	15 days ago
-avlstr	Create avlstr	4 days ago
-bst.cpp	Add files via upload	last month
-bstclass.txt	Add files via upload	last month
-bstdelete	Create bstdelete	last month
-bstinordsucc.c	Add files via upload	last month
-bstinorsuccnpred.cpp	Add files via upload	last month
-bstkthsmallele.cpp	Add files via upload	last month
-bstlevelorder	Create bstlevelorder	last month
-bstminvalnode.cpp	Add files via upload	last month
-bstmirror	Create bstmirror	last month
-bstpathbw2nodes.cpp	Add files via upload	last month
-bsttemplate.cpp	Add files via upload	last month
-btree	Create btree	15 days ago
-btreefull	Create btreefull	15 days ago
-doublehash2.txt	Add files via upload	last month
-doublehashing.cpp	Add files via upload	last month
-filelist	Update filelist	4 days ago
-hash2.txt	Add files via upload	last month
-hashchain2.txt	Add files via upload	last month
-hashinglinearprobing	Add files via upload	last month
-hashinglinearprobing2.txt	Add files via upload	last month
-hashingseperatechain	Add files via upload	last month
-history	Create history	11 days ago
-linearprobingjay.cpp	Add files via upload	last month
-sadhashjay.cpp	Add files via upload	last month
-seperatechainingjay.cpp	Add files via upload	last month
-splay	Update splay	15 days ago
-splay1	Update splay1	15 days ago
-splaycf	Create splaycf	4 days ago
-splaystr
+BubbleSort.cpp		
+Chaining.cpp		
+HeapSort .cpp		
+InsertionSort.cpp		
+MergeSort.cpp		
+Queue.cpp		
+SelectionSort.cpp		
+avl	
+avlclass	 
+avlnoclass.cpp	
+avlstr	
+bst	
+bstclass.txt		
+bstdelete		
+bstinordsucc.c		
+bstinorsuccnpred.cpp		
+bstkthsmallele.cpp		
+bstlevelorder	
+bstminvalnode.cpp		
+bstmirror		
+bstpathbw2nodes.cpp		
+bsttemplate.cpp		
+btree	
+btreefull	
+circularlinkedlist	
+doublehash2.txt		
+doublehashing.cpp		
+doublelinkedlist	
+filelist	
+hash2.txt		
+hashchain2.txt		
+hashinglinearprobing		
+hashinglinearprobing2.txt		
+hashingseperatechain		
+history	Create history	11 
+linearprobingjay.cpp		
+linkedlist	
+sadhashjay.cpp		
+seperatechainingjay.cpp		
+sparsematrix	
+splay	
+splay1	
+splaycf	 
+splaystr	 
+stack
